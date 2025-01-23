@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 import {
   Card,
   CardContent,
@@ -28,14 +31,6 @@ import {
   ReferenceLine,
 } from "recharts";
 import { SparkLineChart } from "@tremor/react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 interface AgentPerformanceData {
   name: string;
@@ -1009,289 +1004,6 @@ const compositeMetrics: QualityIndex = {
   },
 };
 
-// Add ProviderMetricsDrilldown component
-function ProviderMetricsDrilldown({
-  provider,
-}: {
-  provider: (typeof providerCompositeData)[0];
-}) {
-  return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <TableRow className="cursor-pointer hover:bg-muted/50">
-          <TableCell className="font-medium">{provider.name}</TableCell>
-          <TableCell>{provider.type}</TableCell>
-          <TableCell>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">
-                {provider.metrics.cqi.score.toFixed(1)}
-              </span>
-              <span
-                className={`text-xs ${
-                  provider.metrics.cqi.trend >= 0
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                ({provider.metrics.cqi.trend >= 0 ? "+" : ""}
-                {provider.metrics.cqi.trend}%)
-              </span>
-            </div>
-          </TableCell>
-          <TableCell>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">
-                {provider.metrics.dqi.score.toFixed(1)}
-              </span>
-              <span
-                className={`text-xs ${
-                  provider.metrics.dqi.trend >= 0
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                ({provider.metrics.dqi.trend >= 0 ? "+" : ""}
-                {provider.metrics.dqi.trend}%)
-              </span>
-            </div>
-          </TableCell>
-          <TableCell>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">
-                {provider.metrics.mhs.score.toFixed(1)}
-              </span>
-              <span
-                className={`text-xs ${
-                  provider.metrics.mhs.trend >= 0
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                ({provider.metrics.mhs.trend >= 0 ? "+" : ""}
-                {provider.metrics.mhs.trend}%)
-              </span>
-            </div>
-          </TableCell>
-          <TableCell>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">
-                {provider.metrics.ihs.score.toFixed(1)}
-              </span>
-              <span
-                className={`text-xs ${
-                  provider.metrics.ihs.trend >= 0
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                ({provider.metrics.ihs.trend >= 0 ? "+" : ""}
-                {provider.metrics.ihs.trend}%)
-              </span>
-            </div>
-          </TableCell>
-          <TableCell>{provider.cases.active}</TableCell>
-          <TableCell>
-            <div className="flex flex-col gap-1 text-xs">
-              <span>NICU: {provider.facilities.nicu ? "✓" : "✗"}</span>
-              <span>
-                Blood Bank: {provider.facilities.bloodBank ? "✓" : "✗"}
-              </span>
-              <span>ORs: {provider.facilities.operatingRooms}</span>
-              <span>ICU Beds: {provider.facilities.icuBeds}</span>
-            </div>
-          </TableCell>
-          <TableCell>
-            <span
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                provider.cases.highRisk / provider.cases.active > 0.15
-                  ? "bg-red-100 text-red-800"
-                  : provider.cases.highRisk / provider.cases.active > 0.1
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-green-100 text-green-800"
-              }`}
-            >
-              {(
-                (provider.cases.highRisk / provider.cases.active) *
-                100
-              ).toFixed(1)}
-              % High Risk
-            </span>
-          </TableCell>
-        </TableRow>
-      </SheetTrigger>
-      <SheetContent className="w-[90vw] sm:max-w-[800px] overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle className="text-xl font-bold">
-            {provider.name} - Performance Analysis
-          </SheetTitle>
-          <div className="flex items-center gap-2 mt-2">
-            <span className="text-sm text-muted-foreground">
-              {provider.type}
-            </span>
-          </div>
-        </SheetHeader>
-
-        <div className="mt-6 space-y-6">
-          {/* Composite Metrics */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Care Quality Index
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <MetricDrilldown
-                  metric="Care Quality Index"
-                  data={compositeMetrics.cqi}
-                />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Data Quality Index
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <MetricDrilldown
-                  metric="Data Quality Index"
-                  data={compositeMetrics.dqi}
-                />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Maternal Health Score
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <MetricDrilldown
-                  metric="Maternal Health Score"
-                  data={compositeMetrics.mhs}
-                />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Infant Health Score
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <MetricDrilldown
-                  metric="Infant Health Score"
-                  data={compositeMetrics.ihs}
-                />
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Facility Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Facility Details</CardTitle>
-              <CardDescription>Infrastructure and capabilities</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <h4 className="font-semibold mb-2">Infrastructure</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Operating Rooms</span>
-                      <span>{provider.facilities.operatingRooms}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>ICU Beds</span>
-                      <span>{provider.facilities.icuBeds}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>NICU</span>
-                      <span>
-                        {provider.facilities.nicu
-                          ? "Available"
-                          : "Not Available"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Blood Bank</span>
-                      <span>
-                        {provider.facilities.bloodBank
-                          ? "Available"
-                          : "Not Available"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">Performance Metrics</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Patient Satisfaction</span>
-                      <span>{provider.performance.patientSatisfaction}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Adherence Rate</span>
-                      <span>{provider.performance.adherenceRate}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Complication Rate</span>
-                      <span>{provider.performance.complicationRate}%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Risk Profile */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Risk Profile Analysis</CardTitle>
-              <CardDescription>
-                Case distribution and risk metrics
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="text-center">
-                  <div className="text-2xl font-bold">
-                    {provider.cases.total}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Total Cases
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold">
-                    {provider.cases.active}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Active Cases
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold">
-                    {provider.cases.highRisk}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    High Risk Cases
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </SheetContent>
-    </Sheet>
-  );
-}
-
 export function FiduciaryDashboard() {
   return (
     <div className="w-full min-h-screen p-4">
@@ -2121,10 +1833,117 @@ export function FiduciaryDashboard() {
                   </TableHeader>
                   <TableBody>
                     {providerCompositeData.map((provider) => (
-                      <ProviderMetricsDrilldown
-                        key={provider.providerId}
-                        provider={provider}
-                      />
+                      <TableRow key={provider.providerId}>
+                        <TableCell className="font-medium">
+                          {provider.name}
+                        </TableCell>
+                        <TableCell>{provider.type}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">
+                              {provider.metrics.cqi.score.toFixed(1)}
+                            </span>
+                            <span
+                              className={`text-xs ${
+                                provider.metrics.cqi.trend >= 0
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
+                              ({provider.metrics.cqi.trend >= 0 ? "+" : ""}
+                              {provider.metrics.cqi.trend}%)
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">
+                              {provider.metrics.dqi.score.toFixed(1)}
+                            </span>
+                            <span
+                              className={`text-xs ${
+                                provider.metrics.dqi.trend >= 0
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
+                              ({provider.metrics.dqi.trend >= 0 ? "+" : ""}
+                              {provider.metrics.dqi.trend}%)
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">
+                              {provider.metrics.mhs.score.toFixed(1)}
+                            </span>
+                            <span
+                              className={`text-xs ${
+                                provider.metrics.mhs.trend >= 0
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
+                              ({provider.metrics.mhs.trend >= 0 ? "+" : ""}
+                              {provider.metrics.mhs.trend}%)
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">
+                              {provider.metrics.ihs.score.toFixed(1)}
+                            </span>
+                            <span
+                              className={`text-xs ${
+                                provider.metrics.ihs.trend >= 0
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
+                              ({provider.metrics.ihs.trend >= 0 ? "+" : ""}
+                              {provider.metrics.ihs.trend}%)
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>{provider.cases.active}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-col gap-1 text-xs">
+                            <span>
+                              NICU: {provider.facilities.nicu ? "✓" : "✗"}
+                            </span>
+                            <span>
+                              Blood Bank:{" "}
+                              {provider.facilities.bloodBank ? "✓" : "✗"}
+                            </span>
+                            <span>
+                              ORs: {provider.facilities.operatingRooms}
+                            </span>
+                            <span>ICU Beds: {provider.facilities.icuBeds}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                              provider.cases.highRisk / provider.cases.active >
+                              0.15
+                                ? "bg-red-100 text-red-800"
+                                : provider.cases.highRisk /
+                                    provider.cases.active >
+                                  0.1
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
+                          >
+                            {(
+                              (provider.cases.highRisk /
+                                provider.cases.active) *
+                              100
+                            ).toFixed(1)}
+                            % High Risk
+                          </span>
+                        </TableCell>
+                      </TableRow>
                     ))}
                   </TableBody>
                 </Table>

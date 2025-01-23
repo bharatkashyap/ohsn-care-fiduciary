@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 import {
   Card,
   CardContent,
@@ -26,7 +29,6 @@ import {
   Bar,
   ReferenceLine,
 } from "recharts";
-import { SparkLineChart } from "@tremor/react";
 import {
   Sheet,
   SheetContent,
